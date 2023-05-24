@@ -1,3 +1,4 @@
+require('dotenv').config()
 import "reflect-metadata";
 import { ApolloServer } from "@apollo/server";
 import { buildSchema } from "type-graphql";
@@ -7,11 +8,12 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import CountryRepository from "./repository/Country.repository";
 import CountryResolver from "./resolver/Country.resolver";
 
-
 const database = new DataSource({
   type : "sqlite",
   database: ":memory:",
-  // dropSchema: true,
+  // type: "postgres",
+  // url: `postgres://postgres:${process.env.DATABASE_PASSWORD}@localhost:5455/postgres`,
+  //dropSchema: true,
   synchronize: true,
   entities: [__dirname + `/entity/*.entity.{js,ts}`],
   logging: ["query", "error"],
@@ -20,7 +22,7 @@ const database = new DataSource({
 async function getDatabase() {
   try {
     await database.initialize();
-    console.log(`In memory Db initialized`)
+    console.log(`Db initialized`)
   } catch (err : any) {
     console.error(`dbConnectionManager - error initializing db. Error: ${err.message}`)
   }

@@ -1,8 +1,11 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
+//add schema with in memory db or existing schema in the db (if no existing, add directly in the db with psql, admirer... or use migrations TypeOrm)
+@Entity({ schema: "example" })
 
-@Entity()
+//without schema
+// @Entity()
 @Unique(["countryName", "code", "emoji"])
 @ObjectType()
 export default class Country {
