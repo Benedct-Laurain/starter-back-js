@@ -45,6 +45,7 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema: await buildSchema({
       resolvers: [CountryResolver],
+      validate: { forbidUnknownValues: false }  //class-validator
     }),
     csrfPrevention: true,
     cache: "bounded",
