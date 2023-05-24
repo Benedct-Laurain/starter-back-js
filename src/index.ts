@@ -8,11 +8,16 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import CountryRepository from "./repository/Country.repository";
 import CountryResolver from "./resolver/Country.resolver";
 
+
+/*-----DATABASE--------------------------------------------------------------------------*/
+
 const database = new DataSource({
   type : "sqlite",
   database: ":memory:",
   // type: "postgres",
   // url: `postgres://postgres:${process.env.DATABASE_PASSWORD}@localhost:5455/postgres`,
+  // type: "sqlite",
+  // database: "countries.sqlite" -> local file
   //dropSchema: true,
   synchronize: true,
   entities: [__dirname + `/entity/*.entity.{js,ts}`],
@@ -41,6 +46,9 @@ async function closeConnection() {
   await database.destroy();
 }
 
+
+/*-----SERVER--------------------------------------------------------------------------*/
+
 const startServer = async () => {
   const server = new ApolloServer({
     schema: await buildSchema({
@@ -57,12 +65,14 @@ const startServer = async () => {
   
   await initializeDatabaseRepositories();
   
-  await CountryRepository.initializeCountries();
+  await CountryRepository.initializeDataCountries();
 
   console.log(`🚀 Server ready at ${url}`);
 };
 
 startServer();
+
+/*------------------------------------------------------------------------------------*/
 
 export {
   getRepository,

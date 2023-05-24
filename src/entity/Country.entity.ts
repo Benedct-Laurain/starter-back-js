@@ -6,32 +6,44 @@ import { Column, Entity, PrimaryGeneratedColumn, Unique } from "typeorm";
 
 //without schema
 // @Entity()
-@Unique(["countryName", "code", "emoji"])
+@Unique(["country", "code", "flag"])
 @ObjectType()
 export default class Country {
   constructor(
-    countryName: string,
+    country: string,
     code: string,
-    emoji: string
+    capital: string,
+    continent: string,
+    flag: string
   ) {
-    this.countryName = countryName;
+    this.country = country;
     this.code = code;
-    this.emoji = emoji;
+    this.capital = capital;
+    this.continent = continent;
+    this.flag = flag;
   }
-  
+
   @PrimaryGeneratedColumn("uuid")
-  @Field(type => ID)
+  @Field(() => ID)
   id: string;
 
   @Column()
   @Field()
-  countryName: string;
+  country: string;
 
   @Column()
-  @Field({ nullable: true })
+  @Field()
   code: string;
 
   @Column()
   @Field()
-  emoji: string;
+  capital: string;
+
+  @Column()
+  @Field()
+  continent: string;
+
+  @Column()
+  @Field()
+  flag: string;
 }

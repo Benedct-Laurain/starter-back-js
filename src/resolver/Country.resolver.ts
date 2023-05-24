@@ -4,8 +4,14 @@ import CountryRepository from "../repository/Country.repository";
 
 @Resolver(Country)
 export default class CountryResolver {
+
+  @Query(() => [Country])
+  countries(): Promise<Country[]> {
+    return CountryRepository.getAllCountries();
+  }
+
   @Query(() => Country)
-  countryByName(@Arg("countryName") countryName : string): Promise<Country> {
-    return CountryRepository.getCountryByName(countryName)
+  countryByName(@Arg("country") country : string): Promise<Country> {
+    return CountryRepository.getCountryByName(country)
   }
 }

@@ -1,6 +1,7 @@
 import { ILike, Repository } from "typeorm";
 import { getRepository } from "../index";
 import Country from "../entity/Country.entity";
+import CountryFixtures from "../data/countries";
 
 export default class CountryRepository {
   private static repository: Repository<Country>;
@@ -13,17 +14,21 @@ export default class CountryRepository {
     this.repository.delete({});
   }
 
-  static async initializeCountries(): Promise<void> {
-    const france = new Country("France", "FR", "🇫🇷")
-    const uk = new Country("UK", "GB", "🇬🇧")
-    const spain = new Country("Espagne", "ES", "🇪🇸")
-    await this.repository.save([spain, uk, france])
+  static async initializeDataCountries(): Promise<void> {
+    const countries = CountryFixtures.Countries;
+    for (const country of countries) {
+      await this.repository.save(country);
+    }
   }
 
-  static async getCountryByName(countryName: string): Promise<Country> {
+  static async getAllCountries(): Promise<Country[]> {
+    return this.repository.find();
+  }
+
+  static async getCountryByName(country: string): Promise<Country> {
     const existingCountry = await this.repository.findOne({ 
       where: {
-        countryName: ILike(`%${countryName}%`)
+        country: ILike(`%${country}%`)
       }
     });
     if (!existingCountry) {
